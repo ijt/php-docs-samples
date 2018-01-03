@@ -34,7 +34,7 @@ db_pass=$(head -c8 </dev/urandom | xxd -p)
 log=$(mktemp)
 echo "Logging to $log."
 
-echo "Fetching and unpacking the latest version of WordPress."
+echo "Fetching and unpacking the latest version of WordPress into ./$project."
 curl --silent https://wordpress.org/latest.zip >wordpress.zip \
   || die "Failed to fetch latest version of WordPress."
 unzip wordpress.zip &>$log || die "Failed to unzip wordpress.zip: $(cat $log)"
@@ -74,7 +74,7 @@ sed -i.bak "s#'DB_HOST', 'localhost'#'DB_HOST', '$db_host'#" wp-config.php \
   || die "Failed to set db host in wp-config.php."
 rm wp-config.php.bak
 
-echo "Setting up an App Engine app in $project."
+echo "Setting up an App Engine app."
 echo "\
 runtime: php72
 instance_class: F4
@@ -86,9 +86,9 @@ gcloud app create --region=us-central &>$log \
   || die "Failed to create GAE app: $(cat $log)"
 gcloud sql instances patch $db_instance --authorized-gae-apps $project &>$log \
   || die "Failed to authorize GAE app to connect to db: $(cat $log)"
-yes | gcloud app deploy &>$log
+echo y | gcloud app deploy &>$log
 if [[ $? != 0 ]]; then die "Failed to deploy GAE app: $(cat $log)"; fi
 
-url=$(grep -o "http[s:/]*$project.*\.com" $log)
+url=$(grep -o "http[s:/]*$project.*\.com" $log | head -n 1)
 if [[ $? != 0 ]]; then die "Failed to find app url in $log."; fi
 echo "Your new WordPress app is at $url."
