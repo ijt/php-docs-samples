@@ -40,7 +40,6 @@ class WordPressSetup extends Command
         'https://downloads.wordpress.org/plugin/gcs.0.1.2.zip';
 
     const FLEXIBLE_ENV = 'Flexible Environment';
-    const STANDARD_ENV = 'Standard Environment';
 
     const DEFAULT_DB_REGION = 'us-central1';
 
@@ -56,17 +55,6 @@ class WordPressSetup extends Command
         $this
             ->setName('setup')
             ->setDescription('Setup WordPress on GCP')
-            ->addOption(
-                'env',
-                'e',
-                InputOption::VALUE_OPTIONAL,
-                'App Engine environment to use; f: '
-                . self::FLEXIBLE_ENV
-                . ', s: '
-                . self::STANDARD_ENV
-                . '.',
-                null
-            )
             ->addOption(
                 'dir',
                 'd',
@@ -237,21 +225,7 @@ class WordPressSetup extends Command
         if (!$this->report($output, $project)) {
             return self::DEFAULT_ERROR;
         }
-        $env = $input->getOption('env');
-        if ($env === 'f') {
-            $env = self::FLEXIBLE_ENV;
-        } elseif ($env === 's') {
-            $env = self::STANDARD_ENV;
-        } else {
-            $q = new ChoiceQuestion(
-                'Please select the App Engine Environment '
-                . '(defaults to ' . self::FLEXIBLE_ENV . ')',
-                array(self::FLEXIBLE_ENV, self::STANDARD_ENV),
-                self::FLEXIBLE_ENV
-            );
-            $q->setErrorMessage('Environment %s is invalid.');
-            $env = $helper->ask($input, $output, $q);
-        }
+        $env = self::FLEXIBLE_ENV;
         $output->writeln('Creating a new project for: <info>' . $env
                          . '</info>');
 
