@@ -1,6 +1,6 @@
 # A script to set up WordPress on App Engine Standard
 
-The script allows you to create a WordPress project for the
+This script creates a WordPress project for the
 [App Engine standard environment][appengine-standard].
 
 ## Prerequisites
