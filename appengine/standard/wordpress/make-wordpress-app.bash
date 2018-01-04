@@ -39,7 +39,7 @@ accounts=( $(gcloud alpha billing accounts list \
 				| awk '{if(NR>1) print}') )
 case ${#accounts[@]} in
 0)
-	die "No billing accounts found. Please create one"
+	die "No billing accounts found. Please create one."
 	;;
 1)
 	account=${accounts[0]}
