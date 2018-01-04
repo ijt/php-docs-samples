@@ -27,7 +27,7 @@ db_instance=instance
 db_name=wordpress
 db_pass=$(head -c8 </dev/urandom | xxd -p)
 
-dir=$(mktemp -d)
+dir=$(mktemp -d /tmp/wp-XXXX)
 log=$dir/log
 cd $dir
 echo "Working in $dir, logging to $log. To watch progress use 'tail -f $log'."
