@@ -281,67 +281,20 @@ class WordPressSetup extends Command
             'db_user' => 'wp',
             'db_password' => '',
         );
-        if ($env === self::STANDARD_ENV) {
-            $output->writeln('Downloading the Batcache plugin...');
-            $project->downloadArchive(
-                'Batcache plugin', self::LATEST_BATCACHE,
-                '/wordpress/wp-content/plugins'
-            );
-            if (!$this->report($output, $project)) {
-                return self::DEFAULT_ERROR;
-            }
-
-            $output->writeln('Downloading the Memcached plugin...');
-            $project->downloadArchive(
-                'Memcached plugin', self::LATEST_MEMCACHED,
-                '/wordpress/wp-content/plugins'
-            );
-            if (!$this->report($output, $project)) {
-                return self::DEFAULT_ERROR;
-            }
-
-            $output->writeln('Copying drop-ins...');
-            $dir = $project->getDir();
-            copy(
-                $dir . '/wordpress/wp-content/plugins/batcache/advanced-cache.php',
-                $dir . '/wordpress/wp-content/advanced-cache.php'
-            );
-            copy(
-                $dir . '/wordpress/wp-content/plugins/memcached/object-cache.php',
-                $dir . '/wordpress/wp-content/object-cache.php'
-            );
-            $copyFiles = array(
-                'app.yaml' => '/',
-                'cron.yaml' => '/',
-                'composer.json' => '/',
-                'php.ini' => '/',
-                'wp-config.php' => '/wordpress/',
-            );
-            $templateDir = __DIR__ . '/files/standard';
-            $output->writeln('Downloading the appengine-wordpress plugin...');
-            $project->downloadArchive(
-                'App Engine WordPress plugin', self::LATEST_GAE_WP,
-                '/wordpress/wp-content/plugins'
-            );
-            if (!$this->report($output, $project)) {
-                return self::DEFAULT_ERROR;
-            }
-        } else {
-            // Download gcs plugin
-            $project->downloadArchive(
-                'GCS plugin', self::LATEST_GCS_PLUGIN,
-                '/wordpress/wp-content/plugins'
-            );
-            $copyFiles = array(
-                'app.yaml' => '/',
-                'cron.yaml' => '/',
-                'composer.json' => '/',
-                'nginx-app.conf' => '/',
-                'php.ini' => '/',
-                'wp-config.php' => '/wordpress/',
-            );
-            $templateDir = __DIR__ . '/files/flexible';
-        }
+        // Download gcs plugin
+        $project->downloadArchive(
+            'GCS plugin', self::LATEST_GCS_PLUGIN,
+            '/wordpress/wp-content/plugins'
+        );
+        $copyFiles = array(
+            'app.yaml' => '/',
+            'cron.yaml' => '/',
+            'composer.json' => '/',
+            'nginx-app.conf' => '/',
+            'php.ini' => '/',
+            'wp-config.php' => '/wordpress/',
+        );
+        $templateDir = __DIR__ . '/files/flexible';
         $params = array();
         $this->askParameters($keys, $params, $input, $output, $helper);
         $params['db_connection'] = sprintf(
