@@ -69,8 +69,9 @@ sed -i.bak 's#<?php#<?php\n\ndefine("UPLOADS", "/tmp");\n\n#' wp-config.php \
   2>$log || die "Failed to define UPLOADS in wp-config.php: $(cat $log)"
 # TODO(ijt): See if we can change WordPress upstream to respect absolute
 # UPLOADS dirs such as /tmp.
-sed -i.bak 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php)
-  || die "Failed to strip ABSPATH prefix from UPLOADS in WordPress sources."
+sed -i.bak 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log
+  || die "Failed to strip ABSPATH prefix from UPLOADS in WordPress sources: \
+    $(cat $log)"
 
 echo "Setting up GCP project $project with billing enabled."
 gcloud projects create $project &>$log \
