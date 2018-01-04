@@ -63,16 +63,6 @@ unzip wordpress.zip >$log || die "Failed to unzip wordpress.zip: $(tail $log)"
 mv wordpress $project || die "Failed to rename wordpress directory to $project"
 cd $project || die "Failed to cd into $project."
 
-echo "Making WordPress use /tmp for uploads since /tmp is writable but \
-the app directory tree is not."
-sed -i.bak 's#<?php#<?php\n\ndefine("UPLOADS", "/tmp");\n\n#' wp-config.php \
-  2>$log || die "Failed to define UPLOADS in wp-config.php: $(cat $log)"
-# TODO(ijt): See if we can change WordPress upstream to respect absolute
-# UPLOADS dirs such as /tmp.
-sed -i.bak 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log
-  || die "Failed to strip ABSPATH prefix from UPLOADS in WordPress sources: \
-    $(cat $log)"
-
 echo "Setting up GCP project $project with billing enabled."
 gcloud projects create $project &>$log \
   || die "Failed to create project $project: $(cat $log)"
@@ -91,7 +81,17 @@ gcloud sql databases create $db_name --instance=$db_instance \
   &>$log || die "Failed to create database $db_name: $(cat $log)"
 
 echo "Configuring WordPress."
+echo "  Making WordPress use /tmp for uploads because /tmp is writable but \
+the app directory tree is not."
 cp wp-config-sample.php wp-config.php || die "Failed to create wp-config.php."
+sed -i.bak 's#<?php#<?php\n\ndefine("UPLOADS", "/tmp");\n\n#' wp-config.php \
+  2>$log || die "Failed to define UPLOADS in wp-config.php: $(cat $log)"
+# TODO(ijt): See if we can change WordPress upstream to respect absolute
+# UPLOADS dirs such as /tmp.
+sed -i.bak 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log
+  || die "Failed to strip ABSPATH prefix from UPLOADS in WordPress sources: \
+    $(cat $log)"
+echo "  Configuring db connection."
 sed -i.bak "s/database_name_here/$db_name/" wp-config.php \
   || die "Failed to set db name in wp-config.php."
 sed -i.bak 's/username_here/root/' wp-config.php \
