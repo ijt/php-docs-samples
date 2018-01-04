@@ -102,10 +102,13 @@ instance_class: F4
 handlers:
 - url: /(.*)
   script: \1" >app.yaml || die "Failed to create app.yaml"
+echo "  Creating the app."
 gcloud app create --region=us-central &>$log \
   || die "Failed to create GAE app: $(cat $log)"
+echo "  Giving the app access to the Cloud SQL instance."
 gcloud sql instances patch $db_instance --authorized-gae-apps $project &>$log \
   || die "Failed to authorize GAE app to connect to db: $(cat $log)"
+echo "  Deploying the app."
 echo y | gcloud app deploy &>$log
 if [[ $? != 0 ]]; then die "Failed to deploy GAE app: $(cat $log)"; fi
 
