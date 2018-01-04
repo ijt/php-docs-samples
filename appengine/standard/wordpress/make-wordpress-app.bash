@@ -27,8 +27,10 @@ db_instance=instance
 db_name=wordpress
 db_pass=$(head -c8 </dev/urandom | xxd -p)
 
-log=$(mktemp)
-echo "Logging to $log."
+dir=$(mktemp -d)
+log=$dir/log
+cd $dir
+echo "Working in $dir, logging to $log. To watch progress use 'tail -f $log'."
 
 # Figure out which billing account to use.
 IFS=$'\n';
