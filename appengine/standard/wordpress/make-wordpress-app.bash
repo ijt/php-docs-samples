@@ -61,11 +61,6 @@ curl --silent https://wordpress.org/latest.zip >wordpress.zip \
   || die "Failed to fetch latest version of WordPress."
 unzip wordpress.zip >$log || die "Failed to unzip wordpress.zip: $(tail $log)"
 mv wordpress $project || die "Failed to rename wordpress directory to $project"
-curl --silent https://downloads.wordpress.org/plugin/wp-stateless.2.1.1.zip >wp-stateless.zip \
-  || die "Failed to fetch wp-stateless."
-unzip wp-stateless.zip >$log || die "Failed to unzip wp-stateless.zip: $(tail $log)"
-mv wp-stateless $project/wp-content/plugins &>$log \
-  || die "Failed to move wp-stateless plugin into place: $(cat $log)"
 cd $project || die "Failed to cd into $project."
 
 echo "Setting up GCP project $project with billing enabled."
