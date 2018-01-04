@@ -35,22 +35,22 @@ IFS=$'\n';
 echo y | gcloud components install alpha &>$log
 if [[ $? != 0 ]]; then die "Failed to install gcloud alpha component: $log"; fi
 accounts=( $(gcloud alpha billing accounts list \
-				| perl -pe 's/(True|False)$//' \
-				| awk '{if(NR>1) print}') )
+            | perl -pe 's/(True|False)$//' \
+            | awk '{if(NR>1) print}') )
 case ${#accounts[@]} in
 0)
-	die "No billing accounts found. Please create one."
-	;;
+  die "No billing accounts found. Please create one."
+  ;;
 1)
-	account=${accounts[0]}
-	;;
+  account=${accounts[0]}
+  ;;
 *)
-	PS3='Please choose your billing account: '
-	select opt in "${accounts[@]}"; do
-		account=$(echo $opt | awk '{print $1}')
-		break
-	done
-;;
+  PS3='Please choose your billing account: '
+  select opt in "${accounts[@]}"; do
+    account=$(echo $opt | awk '{print $1}')
+    break
+  done
+  ;;
 esac
 echo "Using billing account $account."
 
