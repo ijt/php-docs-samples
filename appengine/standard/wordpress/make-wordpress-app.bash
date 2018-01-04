@@ -63,6 +63,15 @@ unzip wordpress.zip >$log || die "Failed to unzip wordpress.zip: $(tail $log)"
 mv wordpress $project || die "Failed to rename wordpress directory to $project"
 cd $project || die "Failed to cd into $project."
 
+echo "Making WordPress use /tmp for uploads since /tmp is writable but \
+the app directory tree is not."
+sed -i.bak "s/<?php\n/<?php\ndefine('UPLOADS', '/tmp');\n/" wp-config.php \
+  || die "Failed to define UPLOADS in wp-config.php."
+# TODO(ijt): See if we can change WordPress upstream to respect absolute
+# UPLOADS dirs such as /tmp.
+sed -i.bak 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php)
+  || die "Failed to strip ABSPATH prefix from UPLOADS in WordPress sources."
+
 echo "Setting up GCP project $project with billing enabled."
 gcloud projects create $project &>$log \
   || die "Failed to create project $project: $(cat $log)"
