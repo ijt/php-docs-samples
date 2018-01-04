@@ -1,22 +1,18 @@
 #!/bin/bash
 
 project=$1
-account=$2
-db_tier=$3
+db_tier=$2
 
 function die() {
   echo "$@"
   exit 1
 }
 
-if [[ -z "$project" || -z "$account" || -z "$db_tier" ]]; then
-  die "Usage: $0 PROJECT ACCOUNT DB_TIER
+if [[ -z "$project" || -z "$db_tier" ]]; then
+  die "Usage: $0 PROJECT DB_TIER
 
 PROJECT is the name of the GCP project to create, and the name of a directory
 for its source.
-
-ACCOUNT is the billing account to use for this project. It can be gotten by
-running  gcloud alpha billing accounts list  and selecting from the ID column.
 
 DB_TIER is the tier of the Cloud SQL instance to create, for example
 db-g1-small for testing or db-n1-standard-1 for production. See
@@ -33,6 +29,30 @@ db_pass=$(head -c8 </dev/urandom | xxd -p)
 
 log=$(mktemp)
 echo "Logging to $log."
+
+# Figure out which billing account to use.
+IFS=$'\n';
+echo y | gcloud components install alpha &>$log
+if [[ $? != 0 ]]; then die "Failed to install gcloud alpha component: $log"; fi
+accounts=( $(gcloud alpha billing accounts list \
+				| perl -pe 's/(True|False)$//' \
+				| awk '{if(NR>1) print}') )
+case ${#accounts[@]} in
+0)
+	die "No billing accounts found. Please create one"
+	;;
+1)
+	account=${accounts[0]}
+	;;
+*)
+	PS3='Please choose your billing account: '
+	select opt in "${accounts[@]}"; do
+		account=$(echo $opt | awk '{print $1}')
+		break
+	done
+;;
+esac
+echo "Using billing account $account."
 
 echo "Fetching and unpacking the latest version of WordPress into ./$project."
 curl --silent https://wordpress.org/latest.zip >wordpress.zip \
