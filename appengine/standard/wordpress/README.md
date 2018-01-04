@@ -1,6 +1,6 @@
-# A helper command for running WordPress on App Engine Standard
+# A script to set up WordPress on App Engine Standard
 
-The script allows you to create a working WordPress project for the
+The script allows you to create a WordPress project for the
 [App Engine standard environment][appengine-standard].
 
 ## Prerequisites
