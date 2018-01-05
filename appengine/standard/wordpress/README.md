@@ -13,7 +13,7 @@ This script creates a WordPress project for the
 
 ### Step 1: Command line
 
-Run the following command to fetch the script if you're reading this on the web and haven't already downloaded the script:
+Run the following command if you're reading this on the web and haven't already downloaded the script:
 ```sh
 $ curl https://goo.gl/UbhdA7 >make-wordpress-app
 ```
