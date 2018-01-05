@@ -15,7 +15,7 @@ PROJECT is the name of the GCP project to create, and the name of a directory
 for its source.
 
 DB_TIER is the tier of the Cloud SQL instance to create, for example
-db-g1-small for testing or db-n1-standard-1 for production. See
+db-f1-micro for testing or db-n1-standard-1 for production. See
 https://cloud.google.com/sql/pricing for a list of db tiers and their prices.
 "
 fi
