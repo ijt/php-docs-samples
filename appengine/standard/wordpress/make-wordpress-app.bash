@@ -51,6 +51,7 @@ case ${#accounts[@]} in
   PS3='Please choose your billing account: '
   select opt in "${accounts[@]}"; do
     account=$(echo $opt | awk '{print $1}')
+    if [[ "$account" == "" ]]; then die "No account selected."; fi
     break
   done
   ;;
@@ -81,8 +82,7 @@ echo "Setting up a Cloud SQL instance."
 # This next command sometimes times out for db-f1-micro, giving the impression
 # that it has failed even when it hasn't. That's why the exit status is ignored
 # here and a separate check is done on the next line.
-gcloud sql instances create $db_instance --tier=$db_tier --region=us-central1 \
-  &>$log
+gcloud sql instances create $db_instance --tier=$db_tier --region=us-central1 &>$log
 if [[ $? != 0 ]]; then
   if ! grep "continue waiting" $log; then
     die "Failed to create instance: $(cat $log)"
