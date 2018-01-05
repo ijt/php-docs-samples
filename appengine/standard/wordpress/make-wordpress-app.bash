@@ -79,25 +79,24 @@ gcloud alpha billing projects link --billing-account=$account $project \
   &>$log || die "Failed to enable billing: $(cat $log)"
 
 echo "Setting up a Cloud SQL instance."
-# This next command sometimes times out for db-f1-micro, giving the impression
-# that it has failed even when it hasn't. That's why the exit status is ignored
-# here and a separate check is done on the next line.
-gcloud sql instances create $db_instance --tier=$db_tier --region=us-central1 &>$log
+gcloud sql instances create $db_instance --tier=$db_tier --region=us-central1 \
+  --async &>$log || die "Failed to start creating a Cloud SQL instance."
+job=$(grep '^name:' $log | sed 's/^name: *//')
 if [[ $? != 0 ]]; then
-  if ! grep "continue waiting" $log >/dev/null; then
-    die "Failed to create instance: $(cat $log)"
-  fi
-  echo "gcloud timed out waiting for Cloud SQL instance creation."
-  if [[ "$db_tier" == "db-f1-micro" ]]; then
-    echo "This often happens for db-f1-micro instances."
-  fi
-  echo "Asking gcloud to wait longer."
-  op=$(gcloud beta sql operations list --instance=instance 2>$log \
-      | sed 1d | awk '{print $1}')
-  if [[ $? != 0 ]]; then die "Failed to get instance creation op id: $(cat $log)"; fi
-  gcloud beta sql operations wait $op &>$log \
-    || die "Failed to wait for gcloud sql operation: $(cat $log)"
+  die "Failed to find SQL instance creation job name in $log."
 fi
+while true; do
+  gcloud beta sql operations wait $job &>$log
+  if [[ $? != 0 ]]; then
+    if ! grep 'is taking longer than expected' $log; then
+      die "Failed to wait for job: $(cat $log)"
+    fi
+    # gcloud timed out while waiting. Try again.
+  else
+    # gcloud finished waiting.
+    break
+  fi
+done
 gcloud sql users set-password root % --instance $db_instance --password \
   $db_pass &>$log \
   || die "Failed to set db root password to $db_pass: $(cat $log)"
