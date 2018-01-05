@@ -34,6 +34,7 @@ echo "Working in $dir, logging to $log. To watch progress use 'tail -f $log'."
 
 # Figure out which billing account to use.
 IFS=$'\n';
+gcloud components update &>$log || die "Failed to update gcloud: $(cat $log)"
 echo y | gcloud components install alpha &>$log
 if [[ $? != 0 ]]; then die "Failed to install gcloud alpha component: $log"; fi
 accounts=( $(gcloud alpha billing accounts list \
