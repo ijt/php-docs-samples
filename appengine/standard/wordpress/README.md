@@ -5,8 +5,8 @@ This script creates a WordPress project for the
 
 ## Prerequisites
 
-* If you're on Windows 10, install the [Windows Subsystem for Linux][wsl] and log into your Linux distribution.
 * Make sure you have a billing account at [console.cloud.google.com/billing][billing].
+* Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
 * Install [gcloud][gcloud].
 
 ## Installation
@@ -14,7 +14,8 @@ This script creates a WordPress project for the
 ### Step 1: Command line
 
 ```sh
-./make-wordpress-app.bash PROJECT DB_TIER
+$ wget https://raw.githubusercontent.com/ijt/php-docs-samples/add-wordpress-app-maker-script-for-php72/appengine/standard/wordpress/make-wordpress-app
+$ bash make-wordpress-app PROJECT DB_TIER
 ```
 where PROJECT is the name you want your new project to have and DB\_TIER is your selection from https://cloud.google.com/sql/pricing (try db-f1-micro to test it out).
 
@@ -32,3 +33,5 @@ Enjoy your WordPress installation!
 [billing]: https://console.cloud.google.com/billing
 [gcloud]: https://cloud.google.com/sdk/downloads
 [wsl]: https://docs.microsoft.com/en-us/windows/wsl/install-win10
+[bash]: https://www.gnu.org/software/bash/
+[cloudshell]: https://cloud.google.com/shell/docs/quickstart
