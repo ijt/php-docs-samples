@@ -13,8 +13,13 @@ This script creates a WordPress project for the
 
 ### Step 1: Command line
 
+Run the following command to fetch the script if you're reading this on the web and haven't already downloaded the script:
 ```sh
-$ wget https://raw.githubusercontent.com/ijt/php-docs-samples/add-wordpress-app-maker-script-for-php72/appengine/standard/wordpress/make-wordpress-app
+$ curl https://goo.gl/UbhdA7 >make-wordpress-app
+```
+
+Run this command to create your WordPress app on App Engine with the php72 runtime:
+```sh
 $ bash make-wordpress-app PROJECT DB_TIER
 ```
 where PROJECT is the name you want your new project to have and DB\_TIER is your selection from https://cloud.google.com/sql/pricing (try db-f1-micro to test it out).
