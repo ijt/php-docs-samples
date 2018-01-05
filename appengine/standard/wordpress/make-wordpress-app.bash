@@ -83,9 +83,21 @@ echo "Setting up a Cloud SQL instance."
 # here and a separate check is done on the next line.
 gcloud sql instances create $db_instance --tier=$db_tier --region=us-central1 \
   &>$log
-# Check to see if the instance was created.
-gcloud sql instances list | grep "^$db_instance\\>" \
-  || die "Failed to create Cloud SQL instance: $(cat $log)"
+if [[ $? != 0 ]]; then
+  if ! grep "continue waiting" $log; then
+    die "Failed to create instance: $(cat $log)"
+  fi
+  echo "Cloud SQL instance creation is taking longer than expected."
+  if [[ "$db_tier" == "db-f1-micro" ]]; then
+    echo "This often happens for db-f1-micro instances."
+  fi
+  echo "Waiting longer."
+  op=$(gcloud beta sql operations list --instance=instance 2>$log \
+      | sed 1d | awk '{print $1}')
+  if [[ $? != 0 ]]; then die "Failed to get instance creation op id: $(cat $log)"; fi
+  gcloud beta sql operations wait $op &>$log \
+    || die "Failed to wait for gcloud sql operation: $(cat $log)"
+fi
 gcloud sql users set-password root % --instance $db_instance --password \
   $db_pass &>$log \
   || die "Failed to set db root password to $db_pass: $(cat $log)"
