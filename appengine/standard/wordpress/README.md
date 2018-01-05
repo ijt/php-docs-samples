@@ -5,6 +5,7 @@ This script creates a WordPress project for the
 
 ## Prerequisites
 
+* If you're on Windows 10, install the [Windows Subsystem for Linux][wsl] and log into your Linux distribution.
 * Make sure you have a billing account at [console.cloud.google.com/billing][billing].
 * Install [gcloud][gcloud].
 
@@ -30,3 +31,4 @@ Enjoy your WordPress installation!
 [appengine-standard]: https://cloud.google.com/appengine/docs/standard
 [billing]: https://console.cloud.google.com/billing
 [gcloud]: https://cloud.google.com/sdk/downloads
+[wsl]: https://docs.microsoft.com/en-us/windows/wsl/install-win10
