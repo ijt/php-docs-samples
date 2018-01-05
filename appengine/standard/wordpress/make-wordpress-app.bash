@@ -77,8 +77,14 @@ gcloud alpha billing projects link --billing-account=$account $project \
   &>$log || die "Failed to enable billing: $(cat $log)"
 
 echo "Setting up a Cloud SQL instance."
+# This next command sometimes times out for db-f1-micro, giving the impression
+# that it has failed even when it hasn't. That's why the exit status is ignored
+# here and a separate check is done on the next line.
 gcloud sql instances create $db_instance --tier=$db_tier --region=us-central1 \
-  &>$log || die "Failed to create Cloud SQL instance: $(cat $log)"
+  &>$log
+# Check to see if the instance was created.
+gcloud sql instances list | grep "^$db_instance\\>" \
+  || die "Failed to create Cloud SQL instance: $(cat $log)"
 gcloud sql users set-password root % --instance $db_instance --password \
   $db_pass &>$log \
   || die "Failed to set db root password to $db_pass: $(cat $log)"
