@@ -88,7 +88,7 @@ fi
 while true; do
   gcloud beta sql operations wait $job &>$log
   if [[ $? != 0 ]]; then
-    if ! grep 'is taking longer than expected' $log; then
+    if ! grep 'is taking longer than expected' $log >/dev/null; then
       die "Failed to wait for job: $(cat $log)"
     fi
     # gcloud timed out while waiting. Try again.
