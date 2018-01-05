@@ -87,11 +87,11 @@ if [[ $? != 0 ]]; then
   if ! grep "continue waiting" $log; then
     die "Failed to create instance: $(cat $log)"
   fi
-  echo "Cloud SQL instance creation is taking longer than expected."
+  echo "gcloud timed out waiting for Cloud SQL instance creation."
   if [[ "$db_tier" == "db-f1-micro" ]]; then
     echo "This often happens for db-f1-micro instances."
   fi
-  echo "Waiting longer."
+  echo "Asking gcloud to wait longer."
   op=$(gcloud beta sql operations list --instance=instance 2>$log \
       | sed 1d | awk '{print $1}')
   if [[ $? != 0 ]]; then die "Failed to get instance creation op id: $(cat $log)"; fi
