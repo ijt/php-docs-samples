@@ -84,7 +84,7 @@ echo "Setting up a Cloud SQL instance."
 # here and a separate check is done on the next line.
 gcloud sql instances create $db_instance --tier=$db_tier --region=us-central1 &>$log
 if [[ $? != 0 ]]; then
-  if ! grep "continue waiting" $log; then
+  if ! grep "continue waiting" $log >/dev/null; then
     die "Failed to create instance: $(cat $log)"
   fi
   echo "gcloud timed out waiting for Cloud SQL instance creation."
