@@ -141,11 +141,11 @@ echo "Setting up an App Engine app."
 echo "\
 runtime: php72
 instance_class: F4
-secure: always
 
 handlers:
 - url: /(.*)
-  script: \1" >app.yaml || die "Failed to create app.yaml"
+  script: \1
+  secure: always" >app.yaml || die "Failed to create app.yaml"
 echo "  Creating the app."
 gcloud app create --region=us-central &>$log \
   || die "Failed to create GAE app: $(cat $log)"
