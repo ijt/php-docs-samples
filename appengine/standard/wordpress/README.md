@@ -26,8 +26,6 @@ WordPress app on App Engine.
 ```sh
 $ bash make-wordpress-app <PROJECT> <DB_TIER>
 ```
-For example, `bash make-wordpress-app $USER-wordpress-$RANDOM$RANDOM db-f1-micro`.
-
 The script will ask you to choose a billing account if you have more than one.
 Then it will run for around 30 minutes setting up the Cloud SQL instance and
 app.
