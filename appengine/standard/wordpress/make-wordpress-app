@@ -110,7 +110,7 @@ db_conn_name=$(gcloud sql instances describe $db_instance \
              | grep connectionName \
              | sed 's/connectionName: //')
 db_host=":/cloudsql/$db_conn_name"
-echo "
+echo "\
 <?php
 
 // Temporary workaround for lack of \$_SERVER['HTTPS'] in php72.
