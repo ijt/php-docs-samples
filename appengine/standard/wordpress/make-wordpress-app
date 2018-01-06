@@ -140,6 +140,7 @@ echo "Setting up an App Engine app."
 echo "\
 runtime: php72
 instance_class: F4
+secure: always
 
 handlers:
 - url: /(.*)
