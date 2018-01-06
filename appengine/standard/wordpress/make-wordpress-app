@@ -41,7 +41,7 @@ echo y | gcloud components install beta &>$log \
   || die "Failed to install gcloud beta component: $(cat $log)"
 accounts=( $(gcloud alpha billing accounts list \
             | perl -pe 's/(True|False)$//' \
-            | awk '{if(NR>1) print}') )
+            | sed 1d ) )
 case ${#accounts[@]} in
 0)
   die "No billing accounts found. Please create one."
