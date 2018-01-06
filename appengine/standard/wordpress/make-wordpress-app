@@ -109,30 +109,29 @@ echo "Configuring WordPress."
 echo "  Making WordPress use /tmp for uploads because /tmp is writable but \
 the app directory tree is not."
 cp wp-config-sample.php wp-config.php || die "Failed to create wp-config.php."
-sed -i.bak 's#<?php#<?php\n\ndefine("UPLOADS", "/tmp");\n\n#' wp-config.php \
+perl -pi -e 's#<?php#<?php\n\ndefine("UPLOADS", "/tmp");\n\n#' wp-config.php \
   2>$log || die "Failed to define UPLOADS in wp-config.php: $(cat $log)"
-sed -i.bak 's#<?php#<?php\n\ndefine("FORCE_SSL_ADMIN", true);\n\n#' \
+perl -pi -e 's#<?php#<?php\n\ndefine("FORCE_SSL_ADMIN", true);\n\n#' \
   wp-config.php 2>$log \
   || die "Failed to set FORCE_SSL_ADMIN to true in wp-config.php: $(cat $log)"
 # TODO(ijt): See if we can change WordPress upstream to respect absolute
 # UPLOADS dirs such as /tmp.
-sed -i.bak 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log \
+perl -pi -e 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log \
   || die "Failed to strip ABSPATH prefix from UPLOADS in WordPress sources: \
     $(cat $log)"
 echo "  Configuring db connection."
-sed -i.bak "s/database_name_here/$db_name/" wp-config.php \
+perl -pi -e "s/database_name_here/$db_name/" wp-config.php \
   || die "Failed to set db name in wp-config.php."
-sed -i.bak 's/username_here/root/' wp-config.php \
+perl -pi -e 's/username_here/root/' wp-config.php \
   || die "Failed to set db username to root in wp-config.php."
-sed -i.bak "s/password_here/$db_pass/" wp-config.php \
+perl -pi -e "s/password_here/$db_pass/" wp-config.php \
   || die "Failed to set db password in wp-config.php."
 db_conn_name=$(gcloud sql instances describe $db_instance \
              | grep connectionName \
              | sed 's/connectionName: //')
 db_host=":/cloudsql/$db_conn_name"
-sed -i.bak "s#'DB_HOST', 'localhost'#'DB_HOST', '$db_host'#" wp-config.php \
+perl -pi -e "s#'DB_HOST', 'localhost'#'DB_HOST', '$db_host'#" wp-config.php \
   || die "Failed to set db host in wp-config.php."
-rm wp-config.php.bak
 
 echo "Setting up an App Engine app."
 echo "\
