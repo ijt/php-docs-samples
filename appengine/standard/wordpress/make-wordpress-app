@@ -106,8 +106,12 @@ gcloud sql databases create $db_name --instance=$db_instance \
   &>$log || die "Failed to create database $db_name: $(cat $log)"
 
 echo "Configuring WordPress."
-cp wp-config-sample.php wp-config.php || die "Failed to create wp-config.php."
-perl -pi -e "s#<?php#<?php
+db_conn_name=$(gcloud sql instances describe $db_instance \
+             | grep connectionName \
+             | sed 's/connectionName: //')
+db_host=":/cloudsql/$db_conn_name"
+echo "
+<?php
 
 // Temporary workaround for lack of \$_SERVER['HTTPS'] in php72.
 \$_SERVER['HTTPS'] = \$_SERVER['HTTP_X_APPENGINE_HTTPS'];
@@ -116,13 +120,47 @@ perl -pi -e "s#<?php#<?php
 // but the app directory tree is not. The wp-stateless plugin has to
 // be enabled to make this work.
 define('UPLOADS', '/tmp');
-#g" wp-config.php 2>$log \
-  || die "Failed to add lines to top of wp-config.php: $(cat $log)"
+
+define( 'DB_NAME', '$db_name' );
+define( 'DB_USER', 'root' );
+define( 'DB_PASSWORD', '$db_pass' );
+define( 'DB_HOST', '$db_host' );
+define( 'DB_CHARSET', 'utf8' );
+define( 'DB_COLLATE', '' );
+
+/**#@+
+ * Authentication Unique Keys and Salts from
+ * {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
+ */" 2>$log >> wp-config.php \
+	|| die "Failed to write top of wp-config.php: $(cat $log)"
+curl https://api.wordpress.org/secret-key/1.1/salt/ 2>$log >> wp-config.php \
+	|| die "Failed to curl unique keys and salts: $(cat $log)"
+echo "
+/**#@-*/
+
+\$table_prefix = 'wp_';
+
+define( 'WP_DEBUG', false );
+
+/* That's all, stop editing! Happy blogging. */
+
+/** Absolute path to the WordPress directory. */
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', dirname( __FILE__ ) . '/' );
+}
+
+/** Sets up WordPress vars and included files. */
+require_once( ABSPATH . 'wp-settings.php' );
+" 2>$log >> wp-config.php \
+	|| die "Failed to write bottom of wp-config.php: $(cat $log)"
+# Force WordPress not to prepend ABSPATH to UPLOADS since we have
+# defined UPLOADS to be an absolute path: /tmp.
 # TODO(ijt): See if we can change WordPress upstream to respect absolute
-# UPLOADS dirs such as /tmp.
+# path values for UPLOADS.
 perl -pi -e 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log \
   || die "Failed to strip ABSPATH prefix from UPLOADS in WordPress sources: \
     $(cat $log)"
+
 echo "  Configuring db connection."
 perl -pi -e "s/database_name_here/$db_name/" wp-config.php \
   || die "Failed to set db name in wp-config.php."
@@ -130,10 +168,6 @@ perl -pi -e 's/username_here/root/' wp-config.php \
   || die "Failed to set db username to root in wp-config.php."
 perl -pi -e "s/password_here/$db_pass/" wp-config.php \
   || die "Failed to set db password in wp-config.php."
-db_conn_name=$(gcloud sql instances describe $db_instance \
-             | grep connectionName \
-             | sed 's/connectionName: //')
-db_host=":/cloudsql/$db_conn_name"
 perl -pi -e "s#'DB_HOST', 'localhost'#'DB_HOST', '$db_host'#" wp-config.php \
   || die "Failed to set db host in wp-config.php."
 
