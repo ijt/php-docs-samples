@@ -116,7 +116,8 @@ perl -pi -e "s#<?php#<?php
 // but the app directory tree is not. The wp-stateless plugin has to
 // be enabled to make this work.
 define('UPLOADS', '/tmp');
-#g" 2>$log || die "Failed to add lines to top of wp-config.php: $(cat $log)"
+#g" wp-config.php 2>$log \
+  || die "Failed to add lines to top of wp-config.php: $(cat $log)"
 # TODO(ijt): See if we can change WordPress upstream to respect absolute
 # UPLOADS dirs such as /tmp.
 perl -pi -e 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log \
