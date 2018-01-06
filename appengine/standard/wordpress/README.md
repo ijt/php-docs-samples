@@ -1,4 +1,4 @@
-# A script to set up WordPress on App Engine Standard
+# A script to set up WordPress on the php72 Runtime on App Engine Standard
 
 This script creates a WordPress project for the
 [App Engine standard environment][appengine-standard].
@@ -13,24 +13,33 @@ This script creates a WordPress project for the
 
 ### Step 1: Command line
 
-Run the following command if you're reading this on the web and haven't already downloaded the script:
+Run the following command if you're reading this on the web and haven't already
+downloaded the script:
 ```sh
 $ curl -L https://goo.gl/UbhdA7 >make-wordpress-app
 ```
 
-Run this command to create your WordPress app on App Engine with the php72 runtime:
+Choose `PROJECT` as the name you want your new project to have and `DB_TIER` as
+your selection from https://cloud.google.com/sql/pricing (try `db-f1-micro` to
+test it out). Then run this command to create your WordPress app on App Engine:
 ```sh
-$ bash make-wordpress-app PROJECT DB_TIER
+$ bash make-wordpress-app <PROJECT> <DB_TIER>
 ```
-where PROJECT is the name you want your new project to have and DB\_TIER is your selection from https://cloud.google.com/sql/pricing (try db-f1-micro to test it out).
+For example, `bash make-wordpress-app wordpress-$RANDOM$RANDOM db-f1-micro`.
 
-The script will ask you to choose a billing account if you have more than one. Then it will run for around 10 minutes setting up the Cloud SQL instance and app.
+The script will ask you to choose a billing account if you have more than one.
+Then it will run for around 30 minutes setting up the Cloud SQL instance and
+app.
 
 ### Step 2: Browser
 
-In your browser, visit the link printed out at the end of Step 1 and fill out the admin account setup form.
+In your browser, visit the link printed out at the end of Step 1 and fill out
+the admin account setup form.
 
-Once that is done, log into the admin interface and go to Plugins | Installed Plugins on the menu on the left. In the Plugins page that appears, click Activate for the WP-Stateless plugin. Now your uploaded media will be stored on GCS and will be visible on your WordPress site.
+Once that is done, log into the admin interface and go to `Plugins | Installed
+Plugins` on the menu on the left. In the Plugins page that appears, click
+`Activate` for the `WP-Stateless` plugin. Now your uploaded media will be stored on
+GCS and will be visible on your WordPress site.
 
 Enjoy your WordPress installation!
 
