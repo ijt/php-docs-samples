@@ -106,14 +106,17 @@ gcloud sql databases create $db_name --instance=$db_instance \
   &>$log || die "Failed to create database $db_name: $(cat $log)"
 
 echo "Configuring WordPress."
-echo "  Making WordPress use /tmp for uploads because /tmp is writable but \
-the app directory tree is not."
 cp wp-config-sample.php wp-config.php || die "Failed to create wp-config.php."
-perl -pi -e 's#<?php#<?php\n\ndefine("UPLOADS", "/tmp");\n\n#' wp-config.php \
-  2>$log || die "Failed to define UPLOADS in wp-config.php: $(cat $log)"
-perl -pi -e 's#<?php#<?php\n\ndefine("FORCE_SSL_ADMIN", true);\n\n#' \
-  wp-config.php 2>$log \
-  || die "Failed to set FORCE_SSL_ADMIN to true in wp-config.php: $(cat $log)"
+perl -pi -e "s#<?php#<?php
+
+// Temporary workaround for lack of \$_SERVER['HTTPS'] in php72.
+\$_SERVER['HTTPS'] = \$_SERVER['HTTP_X_APPENGINE_HTTPS'];
+
+// Use /tmp for uploads because /tmp is writable on the php72 runtime
+// but the app directory tree is not. The wp-stateless plugin has to
+// be enabled to make this work.
+define('UPLOADS', '/tmp');
+#g" 2>$log || die "Failed to add lines to top of wp-config.php: $(cat $log)"
 # TODO(ijt): See if we can change WordPress upstream to respect absolute
 # UPLOADS dirs such as /tmp.
 perl -pi -e 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log \
