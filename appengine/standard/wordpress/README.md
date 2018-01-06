@@ -21,7 +21,8 @@ $ curl -L https://goo.gl/UbhdA7 >make-wordpress-app
 
 Choose `PROJECT` as the name you want your new project to have and `DB_TIER` as
 your selection from https://cloud.google.com/sql/pricing (try `db-f1-micro` to
-test it out). Then run this command to create your WordPress app on App Engine:
+test it out). Then run this command to create a new project containing your
+WordPress app on App Engine.
 ```sh
 $ bash make-wordpress-app <PROJECT> <DB_TIER>
 ```
