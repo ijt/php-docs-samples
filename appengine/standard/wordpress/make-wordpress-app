@@ -60,7 +60,7 @@ case ${#accounts[@]} in
 esac
 echo "Using billing account $account."
 
-echo "Fetching and unpacking the latest version of WordPress into ./$project."
+echo "Fetching and unpacking the latest version of WordPress into $dir/$project."
 curl --silent https://wordpress.org/latest.zip >wordpress.zip \
   || die "Failed to fetch latest version of WordPress."
 unzip wordpress.zip >$log || die "Failed to unzip wordpress.zip: $(tail $log)"
