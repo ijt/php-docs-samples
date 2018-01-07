@@ -1,0 +1,28 @@
+#!/bin/bash
+
+function die() {
+  echo "$@" >&2
+  exit 1
+}
+
+set -u
+
+log=$(mktemp)
+
+echo "Fetching, unpacking and patching the latest version of WordPress."
+curl --silent https://wordpress.org/latest.zip >wordpress.zip \
+  || die "Failed to fetch latest version of WordPress."
+unzip wordpress.zip >$log || die "Failed to unzip wordpress.zip: $(tail $log)"
+curl --silent https://downloads.wordpress.org/plugin/wp-stateless.2.1.1.zip >wp-stateless.zip \
+  || die "Failed to fetch wp-stateless."
+unzip wp-stateless.zip >$log || die "Failed to unzip wp-stateless.zip: $(tail $log)"
+mv wp-stateless wordpress/wp-content/plugins &>$log \
+  || die "Failed to move wp-stateless plugin into place: $(cat $log)"
+cd wordpress || die "Failed to cd into wordpress."
+# Force WordPress not to prepend ABSPATH to UPLOADS since we have
+# defined UPLOADS to be an absolute path: /tmp.
+# TODO(ijt): See if we can change WordPress upstream to respect absolute
+# path values for UPLOADS.
+perl -pi -e 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log \
+  || die "Failed to strip ABSPATH prefix from UPLOADS in WordPress sources: \
+    $(cat $log)"
