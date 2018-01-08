@@ -47,6 +47,7 @@ ${d?}/update-wordpress
 cd wordpress
 ${d?}/gen-wp-config ${db_instance?} ${db_name?} ${db_pass?} >wp-config.php
 cp ${d?}/app.yaml .
+echo 'zend_extension=opcache.so' >> php.ini
 
 # At the time of this writing, us-central is the only region available for
 # php72.
