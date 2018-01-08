@@ -23,6 +23,6 @@ cd wordpress || die "Failed to cd into wordpress."
 # defined UPLOADS to be an absolute path: /tmp.
 # TODO(ijt): See if we can change WordPress upstream to respect absolute
 # path values for UPLOADS.
-perl -pi -e 's/\<ABSPATH \. UPLOADS\>/UPLOADS/g' $(find . -name \*.php) 2>$log \
+perl -pi -e 's/\bABSPATH\s*\.\s*UPLOADS\b/UPLOADS/g' $(find . -name \*.php) 2>$log \
   || die "Failed to strip ABSPATH prefix from UPLOADS in WordPress sources: \
     $(cat $log)"
