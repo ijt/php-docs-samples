@@ -1,13 +1,16 @@
 #!/bin/bash
 
 db_tier=$1
+db_instance=$2
+db_name=$3
+db_pass=$4
 
 function die() {
   echo "$@"
   exit 1
 }
 
-if [[ -z "$db_tier" ]]; then
+if [[ -z "$db_tier" || -z "$db_instance" || -z "$db_name" || -z "db_pass" ]]; then
   die "Usage: $0 [DB_TIER] [DB_INSTANCE] [DB_NAME] [DB_PASS]
 
 This command creates a Cloud SQL instance and waits for it to be ready.
