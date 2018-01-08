@@ -28,7 +28,7 @@ gcloud alpha billing projects link --billing-account=${account?} ${proj?}
 
 6. Create a Cloud SQL instance and db:
 ```sh
-proj=[ID OF YOUR PROJECT]
+proj=[ID OF YOUR PROJECT]  # if working in an existing project
 db_tier=db-f1-micro  # See https://cloud.google.com/sql/pricing for more choices
 db_instance=wordpress
 db_name=wordpress
