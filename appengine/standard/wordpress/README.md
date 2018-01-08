@@ -32,8 +32,11 @@ proj=[ID OF YOUR PROJECT]  # if working in an existing project
 db_tier=db-f1-micro  # See https://cloud.google.com/sql/pricing for more choices
 db_instance=wordpress
 db_name=wordpress
-db_pass=$(head -c20 </dev/urandom | xxd -p)
-./set-up-mysql ${db_tier?} ${db_instance?} ${db_name?} ${db_pass?}
+db_pass=$(head -c8 </dev/urandom | xxd -p)
+
+gcloud sql instances create $db_instance --tier=$db_tier --region=us-central1
+gcloud sql users set-password root % --instance $db_instance --password $db_pass
+gcloud sql databases create $db_name --instance=$db_instance
 ```
 
 7. Create and deploy the App Engine app:
