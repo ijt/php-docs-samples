@@ -42,7 +42,7 @@ echo "\
 // Use /tmp for uploads because /tmp is writable on the php72 runtime
 // but the app directory tree is not. The wp-stateless plugin has to
 // be enabled to make this work.
-define('UPLOADS', '/tmp');
+define('UPLOADS', '../tmp');
 
 define( 'DB_NAME', '$db_name' );
 define( 'DB_USER', 'root' );
