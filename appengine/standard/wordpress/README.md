@@ -46,15 +46,7 @@ cd ${app?}
 ${d?}/update-wordpress
 cd wordpress
 ${d?}/gen-wp-config ${db_instance?} ${db_name?} ${db_pass?} >wp-config.php
-
-echo "\
-runtime: php72
-instance_class: F2
-
-handlers:
-- url: /(.*)
-  script: \1
-  secure: always" >app.yaml
+cp ${d?}/app.yaml .
 
 # At the time of this writing, us-central is the only region available for
 # php72.
