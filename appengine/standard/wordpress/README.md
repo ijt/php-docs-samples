@@ -64,10 +64,15 @@ gcloud app deploy
 8. Open the URL printed out by `gcloud app deploy` for your app and fill out
 the admin account setup form that appears.
 
-9. Log into the admin interface and go to `Plugins | Installed
-Plugins` on the menu on the left. In the Plugins page that appears, click
-`Activate` for the `WP-Stateless` plugin. Now your uploaded media will be stored on
-GCS and will be visible on your WordPress site.
+9. A login page will appear for the admin interface for your WordPress app.
+Log into the admin interface.
+
+10. Click `Plugins | Installed Plugins` on the menu on the left.  In the
+Plugins page that appears, click `Activate` for the `WP-Stateless` plugin.
+Now your uploaded media will be stored on GCS and will be visible on your
+WordPress site.
+
+Enjoy your WordPress app!
 
 ## Updating
 When a new version of WordPress become available, you can update your app to use it
@@ -80,8 +85,6 @@ gcloud app deploy
 ```
 Updating from within the WordPress admin console will not work because the php72
 runtime has a mostly read-only file system.
-
-Enjoy your WordPress installation!
 
 [bash]: https://www.gnu.org/software/bash/
 [cloudshell]: https://cloud.google.com/shell/docs/quickstart
