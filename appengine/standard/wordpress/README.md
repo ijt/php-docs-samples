@@ -1,4 +1,4 @@
-# A script to set up WordPress on the php72 Runtime on App Engine Standard
+# Setting Up WordPress on the php72 Runtime on App Engine Standard
 
 This script creates a WordPress project for the
 [App Engine standard environment][appengine-standard].
