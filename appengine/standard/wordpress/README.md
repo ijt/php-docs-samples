@@ -33,9 +33,9 @@ db_instance=wordpress
 db_name=wordpress
 db_pass=$(head -c8 </dev/urandom | xxd -p)
 
-gcloud sql instances create $db_instance --tier=$db_tier --region=us-central1
-gcloud sql users set-password root % --instance $db_instance --password $db_pass
-gcloud sql databases create $db_name --instance=$db_instance
+gcloud sql instances create ${db_instance?} --tier=${db_tier?} --region=us-central1
+gcloud sql users set-password root % --instance ${db_instance?} --password ${db_pass?}
+gcloud sql databases create ${db_name?} --instance=${db_instance?}
 ```
 
 7. Create and deploy the App Engine app:
