@@ -26,7 +26,7 @@ account=[ACCOUNT ID CHOSEN FROM THE LIST]
 gcloud alpha billing projects link --billing-account=${account?} ${proj?}
 ```
 
-6. Create a Cloud SQL instance and db:
+6. Create the Cloud SQL instance and db:
 ```sh
 proj=[ID OF YOUR PROJECT]  # if working in an existing project
 db_tier=db-f1-micro  # See https://cloud.google.com/sql/pricing for more choices
@@ -36,7 +36,7 @@ db_pass=$(head -c20 </dev/urandom | xxd -p)
 ./set-up-mysql ${db_tier?} ${db_instance?} ${db_name?} ${db_pass?}
 ```
 
-7. Create and deploy an App Engine app:
+7. Create and deploy the App Engine app:
 ```sh
 app=[DIR WHERE YOU WANT TO CREATE YOUR APP]
 mkdir -p ${app?}
