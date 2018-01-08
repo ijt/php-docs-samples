@@ -36,7 +36,7 @@ db_pass=$(head -c20 </dev/urandom | xxd -p)
 ./set-up-mysql ${db_tier?} ${db_instance?} ${db_name?} ${db_pass?}
 ```
 
-7. Create and deploy a WordPress app on App Engine with the php72 runtime:
+7. Create and deploy an App Engine app:
 ```sh
 app=[DIR WHERE YOU WANT TO CREATE YOUR APP]
 cd ${app?}
