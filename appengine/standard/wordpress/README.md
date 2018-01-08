@@ -6,6 +6,7 @@
 ```sh
 proj=[ID FOR YOUR NEW PROJECT]
 gcloud projects create $proj
+gcloud config set project $proj
 ```
 4. Enable billing for `$proj`. You can see a list of billing accounts by running
 ```sh
@@ -17,26 +18,25 @@ account=[ACCOUNT ID CHOSEN FROM THE LIST]
 gcloud alpha billing projects link --billing-account=$account $proj
 ```
 
-5. **Clone the repo** and cd into this directory:
-```sh
-git clone https://github.com/GoogleCloudPlatform/php-docs-samples
-cd php-docs-samples/appengine/standard/wordpress
-```
-
-6. Create a Cloud SQL instance and db:
+5. Create a Cloud SQL instance and db:
 ```sh
 db_tier=db-f1-micro  # See https://cloud.google.com/sql/pricing for more choices
 db_instance=wordpress
 db_name=wordpress
 db_pass=$(head -c20 </dev/urandom | xxd -p)
 proj=[ID OF YOUR PROJECT]
-gcloud config set project $proj
 ./set-up-mysql $db_tier $db_instance $db_name $db_pass
+```
+
+6. **Clone the repo** and cd into this directory:
+```sh
+git clone https://github.com/GoogleCloudPlatform/php-docs-samples
+cd php-docs-samples/appengine/standard/wordpress
+d=$(pwd)
 ```
 
 7. Create and deploy a WordPress app on App Engine with the php72 runtime:
 ```sh
-d=$(pwd)
 app=[DIR WHERE YOU WANT TO CREATE YOUR APP]
 cd $app
 $d/update-wordpress
