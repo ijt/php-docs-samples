@@ -10,13 +10,13 @@ set -u
 log=$(mktemp)
 
 echo "Fetching, unpacking and patching the latest version of WordPress."
-curl --silent https://wordpress.org/latest.zip >wordpress.zip \
-  || die "Failed to fetch latest version of WordPress."
-unzip wordpress.zip >$log || die "Failed to unzip wordpress.zip: $(tail $log)"
-curl --silent https://downloads.wordpress.org/plugin/wp-stateless.2.1.1.zip >wp-stateless.zip \
-  || die "Failed to fetch wp-stateless."
-unzip wp-stateless.zip >$log || die "Failed to unzip wp-stateless.zip: $(tail $log)"
-mv wp-stateless wordpress/wp-content/plugins &>$log \
+curl -L https://wordpress.org/latest.tar.gz 2>$log >wordpress.tar.gz \
+  || die "Failed to fetch latest version of WordPress: $(cat $log)"
+tar xzvf wordpress.tar.gz &>$log || die "Failed to untar wordpress tarball: $(tail $log)"
+curl -L https://github.com/wpCloud/wp-stateless/archive/2.1.1.tar.gz 2>$log >wp-stateless.tar.gz \
+  || die "Failed to fetch wp-stateless plugin: $(cat $log)"
+tar xzvf wp-stateless.tar.gz &>$log || die "Failed to untar wp-stateless tarball: $(tail $log)"
+mv wp-stateless-2.1.1 wordpress/wp-content/plugins &>$log \
   || die "Failed to move wp-stateless plugin into place: $(cat $log)"
 cd wordpress || die "Failed to cd into wordpress."
 # Force WordPress not to prepend ABSPATH to UPLOADS since we have
