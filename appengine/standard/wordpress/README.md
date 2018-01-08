@@ -2,7 +2,7 @@
 
 1. Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
 2. [Install gcloud][install-gcloud] if it isn't already installed.
-3. Choose an existing GCP project (whose id is called `${proj?}` below) or create a new project by running
+3. Choose an existing GCP project or create a new project by running
 ```sh
 proj=[ID FOR YOUR NEW PROJECT]
 gcloud projects create ${proj?}
@@ -20,11 +20,11 @@ gcloud alpha billing projects link --billing-account=${account?} ${proj?}
 
 5. Create a Cloud SQL instance and db:
 ```sh
+proj=[ID OF YOUR PROJECT]
 db_tier=db-f1-micro  # See https://cloud.google.com/sql/pricing for more choices
 db_instance=wordpress
 db_name=wordpress
 db_pass=$(head -c20 </dev/urandom | xxd -p)
-proj=[ID OF YOUR PROJECT]
 ./set-up-mysql ${db_tier?} ${db_instance?} ${db_name?} ${db_pass?}
 ```
 
