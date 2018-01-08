@@ -9,12 +9,10 @@ function die() {
   exit 1
 }
 
-if [[ -z "$db_instance" || -z "$db_name" || -z "$db_pass" ]]; then
+if [[ "$#" != "3" ]]; then
   die "Usage: $0 [DB_INSTANCE] [DB_NAME] [DB_PASS]
 
 This script prints to stdout the contents wp-config.php needs to work on php72.
-
-DB_TIER is the tier of the Cloud SQL instance.
 
 DB_INSTANCE is the name of the MySQL instance to create.
 
