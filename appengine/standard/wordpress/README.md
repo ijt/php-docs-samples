@@ -2,21 +2,20 @@
 
 1. Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
 
-2. **Clone the repo** and cd into this directory:
+2. Clone the repo and store this subdirectory in `$d` for later use:
 ```sh
 git clone https://github.com/ijt/php-docs-samples
-cd php-docs-samples/appengine/standard/wordpress
-d=$(pwd)
+d=$(pwd)/php-docs-samples/appengine/standard/wordpress
 ```
 
 3. [Install gcloud][install-gcloud] if it isn't already installed.
-4. Choose an existing GCP project or create a new project by running
+4. Choose an existing GCP project or create a new project:
 ```sh
 proj=[ID FOR YOUR NEW PROJECT]
 gcloud projects create ${proj?}
 gcloud config set project ${proj?}
 ```
-5. List your billing accounts by running
+5. List your billing accounts:
 ```sh
 gcloud alpha billing accounts list
 ```
