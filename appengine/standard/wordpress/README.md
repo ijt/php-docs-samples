@@ -1,14 +1,22 @@
 # Setting Up WordPress on the php72 Runtime on App Engine Standard
 
 1. Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
-2. [Install gcloud][install-gcloud] if it isn't already installed.
-3. Choose an existing GCP project or create a new project by running
+
+2. **Clone the repo** and cd into this directory:
+```sh
+git clone https://github.com/GoogleCloudPlatform/php-docs-samples
+cd php-docs-samples/appengine/standard/wordpress
+d=$(pwd)
+```
+
+3. [Install gcloud][install-gcloud] if it isn't already installed.
+4. Choose an existing GCP project or create a new project by running
 ```sh
 proj=[ID FOR YOUR NEW PROJECT]
 gcloud projects create ${proj?}
 gcloud config set project ${proj?}
 ```
-4. Enable billing for `$proj`. You can see a list of billing accounts by running
+5. Enable billing for `$proj`. You can see a list of billing accounts by running
 ```sh
 gcloud alpha billing accounts list
 ```
@@ -18,7 +26,7 @@ account=[ACCOUNT ID CHOSEN FROM THE LIST]
 gcloud alpha billing projects link --billing-account=${account?} ${proj?}
 ```
 
-5. Create a Cloud SQL instance and db:
+6. Create a Cloud SQL instance and db:
 ```sh
 proj=[ID OF YOUR PROJECT]
 db_tier=db-f1-micro  # See https://cloud.google.com/sql/pricing for more choices
@@ -26,13 +34,6 @@ db_instance=wordpress
 db_name=wordpress
 db_pass=$(head -c20 </dev/urandom | xxd -p)
 ./set-up-mysql ${db_tier?} ${db_instance?} ${db_name?} ${db_pass?}
-```
-
-6. **Clone the repo** and cd into this directory:
-```sh
-git clone https://github.com/GoogleCloudPlatform/php-docs-samples
-cd php-docs-samples/appengine/standard/wordpress
-d=$(pwd)
 ```
 
 7. Create and deploy a WordPress app on App Engine with the php72 runtime:
@@ -59,8 +60,7 @@ gcloud sql instances patch ${db_instance?} --authorized-gae-apps ${proj?}
 gcloud app deploy
 ```
 
-8. Configure WordPress from the browser.
-Once the app is deployed, open it in your browser and fill out the admin
+8. Configure WordPress from the browser.  Once the app is deployed, open it in your browser and fill out the admin
 account setup form that appears.
 
 9. Log into the admin interface and go to `Plugins | Installed
