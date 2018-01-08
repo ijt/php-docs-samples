@@ -70,7 +70,7 @@ WordPress site.
 Enjoy your WordPress app!
 
 ## Updating
-When a new version of WordPress become available, you can update your app to use it
+When a new version of WordPress becomes available, you can update your app to use it
 like this:
 ```sh
 cd ${app?}
