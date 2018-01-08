@@ -70,8 +70,8 @@ Plugins` on the menu on the left. In the Plugins page that appears, click
 GCS and will be visible on your WordPress site.
 
 ## Updating
-When new versions of WordPress become available, you can update your app to use them
-by running these commands:
+When a new version of WordPress become available, you can update your app to use it
+like this:
 ```sh
 cd ${app?}
 ${d?}/update-wordpress
