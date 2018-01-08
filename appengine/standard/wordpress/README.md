@@ -39,6 +39,7 @@ db_pass=$(head -c20 </dev/urandom | xxd -p)
 7. Create and deploy an App Engine app:
 ```sh
 app=[DIR WHERE YOU WANT TO CREATE YOUR APP]
+mkdir -p ${app?}
 cd ${app?}
 ${d?}/update-wordpress
 cd wordpress
