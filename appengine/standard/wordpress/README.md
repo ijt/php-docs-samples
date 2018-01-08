@@ -61,8 +61,8 @@ gcloud sql instances patch ${db_instance?} --authorized-gae-apps ${proj?}
 gcloud app deploy
 ```
 
-8. Configure WordPress from the browser.  Once the app is deployed, open it in your browser and fill out the admin
-account setup form that appears.
+8. Open the URL printed out by `gcloud app deploy` for your app and fill out
+the admin account setup form that appears.
 
 9. Log into the admin interface and go to `Plugins | Installed
 Plugins` on the menu on the left. In the Plugins page that appears, click
