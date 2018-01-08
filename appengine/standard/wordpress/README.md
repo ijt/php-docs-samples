@@ -19,8 +19,8 @@ gcloud alpha billing projects link --billing-account=$account $proj
 
 5. **Clone the repo** and cd into this directory:
 ```sh
-$ git clone https://github.com/GoogleCloudPlatform/php-docs-samples
-$ cd php-docs-samples/appengine/standard/wordpress
+git clone https://github.com/GoogleCloudPlatform/php-docs-samples
+cd php-docs-samples/appengine/standard/wordpress
 ```
 
 6. Create a Cloud SQL instance and db:
