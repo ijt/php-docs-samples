@@ -24,11 +24,16 @@ DB_PASS is the root password to set for the instance.
 "
 fi
 
+set -u
+set -o pipefail
+
 log=$(mktemp)
 
-db_conn_name=$(gcloud sql instances describe $db_instance \
-             | grep connectionName \
-             | sed 's/connectionName: //')
+instances=$(mktemp)
+gcloud sql instances describe $db_instance 2>$log >$instances \
+  || die "Failed to get description of Cloud SQL instance $db_instance: $(cat $log)"
+db_conn_name=$(grep connectionName $instances | sed 's/connectionName: //')
+if [[ $? != 0 ]]; then die "Failed to find connectionName in instance description."; fi
 db_host=":/cloudsql/$db_conn_name"
 echo "\
 <?php
