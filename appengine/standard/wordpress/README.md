@@ -4,7 +4,7 @@
 
 2. **Clone the repo** and cd into this directory:
 ```sh
-git clone https://github.com/GoogleCloudPlatform/php-docs-samples
+git clone https://github.com/ijt/php-docs-samples
 cd php-docs-samples/appengine/standard/wordpress
 d=$(pwd)
 ```
