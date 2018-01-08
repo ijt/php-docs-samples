@@ -3,16 +3,20 @@
 This script creates a WordPress project for the
 [App Engine standard environment][appengine-standard].
 
-## Prerequisites
-
-* Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
-* Install [gcloud][gcloud].
-* Choose an existing GCP project (whose id is called `$proj` below) or [create a new project][create-project].
-* [Enable billing][enable-billing] for `$proj`.
-
 ## Set up
 
-### Create a Cloud SQL instance and db
+1. Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
+2. [Install gcloud][install-gcloud] if it isn't already installed.
+3. Choose an existing GCP project (whose id is called `$proj` below) or [create a new project][create-project].
+4. [Enable billing][enable-billing] for `$proj`.
+
+5. **Clone the repo** and cd into this directory:
+```sh
+$ git clone https://github.com/GoogleCloudPlatform/php-docs-samples
+$ cd php-docs-samples/appengine/standard/wordpress
+```
+
+6. Create a Cloud SQL instance and db:
 ```sh
 db_tier=db-f1-micro  # See https://cloud.google.com/sql/pricing for more choices
 db_instance=wordpress
@@ -23,12 +27,10 @@ gcloud config set project $proj
 ./set-up-mysql $db_tier $db_instance $db_name $db_pass
 ```
 
-### Create and deploy the WordPress app on php72
-Run these commands to create and deploy a WordPress app on App Engine with the php72
-runtime:
+7. Create and deploy a WordPress app on App Engine with the php72 runtime:
 ```sh
 d=$(pwd)
-cd [WHEREVER YOU WANT TO CREATE YOUR APP]
+cd [DIR WHERE YOU WANT TO CREATE YOUR APP]
 $d/update-wordpress
 cd wordpress
 $d/gen-wp-config >wp-config.php
@@ -49,11 +51,11 @@ gcloud sql instances patch $db_instance --authorized-gae-apps $proj
 gcloud app deploy
 ```
 
-### Configure WordPress from the browser
+8. Configure WordPress from the browser.
 Once the app is deployed, open it in your browser and fill out the admin
 account setup form that appears.
 
-Next, log into the admin interface and go to `Plugins | Installed
+9. Log into the admin interface and go to `Plugins | Installed
 Plugins` on the menu on the left. In the Plugins page that appears, click
 `Activate` for the `WP-Stateless` plugin. Now your uploaded media will be stored on
 GCS and will be visible on your WordPress site.
@@ -62,7 +64,9 @@ GCS and will be visible on your WordPress site.
 When new versions of WordPress become available, you can update your app to use them
 by running these commands:
 ```sh
-$wpgae/update-wordpress
+d=$(pwd)
+cd [DIR WHERE YOU CREATED YOUR APP]
+$d/update-wordpress
 cd wordpress
 gcloud app deploy
 ```
@@ -76,5 +80,5 @@ Enjoy your WordPress installation!
 [cloudshell]: https://cloud.google.com/shell/docs/quickstart
 [create-project]: https://cloud.google.com/resource-manager/docs/creating-managing-projects
 [enable-billing]: https://cloud.google.com/billing/docs/how-to/modify-project
-[gcloud]: https://cloud.google.com/sdk/downloads
+[install-gcloud]: https://cloud.google.com/sdk/downloads
 [wsl]: https://docs.microsoft.com/en-us/windows/wsl/install-win10
