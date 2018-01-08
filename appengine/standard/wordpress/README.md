@@ -2,8 +2,20 @@
 
 1. Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
 2. [Install gcloud][install-gcloud] if it isn't already installed.
-3. Choose an existing GCP project (whose id is called `$proj` below) or [create a new project][create-project].
-4. [Enable billing][enable-billing] for `$proj`.
+3. Choose an existing GCP project (whose id is called `$proj` below) or create a new project by running
+```sh
+proj=[ID FOR YOUR NEW PROJECT]
+gcloud projects create $proj
+```
+4. Enable billing for `$proj`. You can see a list of billing accounts by running
+```sh
+gcloud alpha billing accounts list
+```
+To enable billing run
+```sh
+account=[ACCOUNT ID CHOSEN FROM THE LIST]
+gcloud alpha billing projects link --billing-account=$account $proj
+```
 
 5. **Clone the repo** and cd into this directory:
 ```sh
