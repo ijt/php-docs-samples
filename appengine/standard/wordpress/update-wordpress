@@ -15,9 +15,8 @@ curl -L https://wordpress.org/latest.tar.gz 2>$log >wordpress.tar.gz \
 tar xzvf wordpress.tar.gz &>$log || die "Failed to untar wordpress tarball: $(tail $log)"
 curl -L https://github.com/wpCloud/wp-stateless/archive/2.1.1.tar.gz 2>$log >wp-stateless.tar.gz \
   || die "Failed to fetch wp-stateless plugin: $(cat $log)"
-tar xzvf wp-stateless.tar.gz &>$log || die "Failed to untar wp-stateless tarball: $(tail $log)"
-rsync wp-stateless-2.1.1 wordpress/wp-content/plugins &>$log \
-  || die "Failed to copy wp-stateless plugin into place: $(cat $log)"
+tar xzvf wp-stateless.tar.gz -C wordpress/wp-content/plugins &>$log \
+  || die "Failed to untar wp-stateless tarball: $(tail $log)"
 cd wordpress || die "Failed to cd into wordpress."
 # Force WordPress not to prepend ABSPATH to UPLOADS since we have
 # defined UPLOADS to be an absolute path: /tmp.
