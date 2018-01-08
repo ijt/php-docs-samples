@@ -2,20 +2,20 @@
 
 1. Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
 2. [Install gcloud][install-gcloud] if it isn't already installed.
-3. Choose an existing GCP project (whose id is called `$proj` below) or create a new project by running
+3. Choose an existing GCP project (whose id is called `${proj?}` below) or create a new project by running
 ```sh
 proj=[ID FOR YOUR NEW PROJECT]
-gcloud projects create $proj
-gcloud config set project $proj
+gcloud projects create ${proj?}
+gcloud config set project ${proj?}
 ```
-4. Enable billing for `$proj`. You can see a list of billing accounts by running
+4. Enable billing for `${proj?}`. You can see a list of billing accounts by running
 ```sh
 gcloud alpha billing accounts list
 ```
 To enable billing run
 ```sh
 account=[ACCOUNT ID CHOSEN FROM THE LIST]
-gcloud alpha billing projects link --billing-account=$account $proj
+gcloud alpha billing projects link --billing-account=${account?} ${proj?}
 ```
 
 5. Create a Cloud SQL instance and db:
@@ -25,7 +25,7 @@ db_instance=wordpress
 db_name=wordpress
 db_pass=$(head -c20 </dev/urandom | xxd -p)
 proj=[ID OF YOUR PROJECT]
-./set-up-mysql $db_tier $db_instance $db_name $db_pass
+./set-up-mysql ${db_tier?} ${db_instance?} ${db_name?} ${db_pass?}
 ```
 
 6. **Clone the repo** and cd into this directory:
@@ -38,10 +38,10 @@ d=$(pwd)
 7. Create and deploy a WordPress app on App Engine with the php72 runtime:
 ```sh
 app=[DIR WHERE YOU WANT TO CREATE YOUR APP]
-cd $app
-$d/update-wordpress
+cd ${app?}
+${d?}/update-wordpress
 cd wordpress
-$d/gen-wp-config >wp-config.php
+${d?}/gen-wp-config >wp-config.php
 
 echo "\
 runtime: php72
@@ -55,7 +55,7 @@ handlers:
 # At the time of this writing, us-central is the only region available for
 # php72.
 gcloud app create --region=us-central
-gcloud sql instances patch $db_instance --authorized-gae-apps $proj
+gcloud sql instances patch ${db_instance?} --authorized-gae-apps ${proj?}
 gcloud app deploy
 ```
 
@@ -72,8 +72,8 @@ GCS and will be visible on your WordPress site.
 When new versions of WordPress become available, you can update your app to use them
 by running these commands:
 ```sh
-cd $app
-$d/update-wordpress
+cd ${app?}
+${d?}/update-wordpress
 cd wordpress
 gcloud app deploy
 ```
