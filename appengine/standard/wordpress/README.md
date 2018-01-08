@@ -37,7 +37,8 @@ gcloud config set project $proj
 7. Create and deploy a WordPress app on App Engine with the php72 runtime:
 ```sh
 d=$(pwd)
-cd [DIR WHERE YOU WANT TO CREATE YOUR APP]
+app=[DIR WHERE YOU WANT TO CREATE YOUR APP]
+cd $app
 $d/update-wordpress
 cd wordpress
 $d/gen-wp-config >wp-config.php
@@ -71,8 +72,7 @@ GCS and will be visible on your WordPress site.
 When new versions of WordPress become available, you can update your app to use them
 by running these commands:
 ```sh
-d=$(pwd)
-cd [DIR WHERE YOU CREATED YOUR APP]
+cd $app
 $d/update-wordpress
 cd wordpress
 gcloud app deploy
