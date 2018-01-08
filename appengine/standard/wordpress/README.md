@@ -16,11 +16,11 @@ proj=[ID FOR YOUR NEW PROJECT]
 gcloud projects create ${proj?}
 gcloud config set project ${proj?}
 ```
-5. Enable billing for `$proj`. You can see a list of billing accounts by running
+5. List your billing accounts by running
 ```sh
 gcloud alpha billing accounts list
 ```
-To enable billing run
+Enable billing for your project:
 ```sh
 account=[ACCOUNT ID CHOSEN FROM THE LIST]
 gcloud alpha billing projects link --billing-account=${account?} ${proj?}
