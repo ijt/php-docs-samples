@@ -1,10 +1,5 @@
 # Setting Up WordPress on the php72 Runtime on App Engine Standard
 
-This script creates a WordPress project for the
-[App Engine standard environment][appengine-standard].
-
-## Set up
-
 1. Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
 2. [Install gcloud][install-gcloud] if it isn't already installed.
 3. Choose an existing GCP project (whose id is called `$proj` below) or [create a new project][create-project].
@@ -75,7 +70,6 @@ runtime has a mostly read-only file system.
 
 Enjoy your WordPress installation!
 
-[appengine-standard]: https://cloud.google.com/appengine/docs/standard
 [bash]: https://www.gnu.org/software/bash/
 [cloudshell]: https://cloud.google.com/shell/docs/quickstart
 [create-project]: https://cloud.google.com/resource-manager/docs/creating-managing-projects
