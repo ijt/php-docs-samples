@@ -43,7 +43,7 @@ mkdir -p ${app?}
 cd ${app?}
 ${d?}/update-wordpress
 cd wordpress
-${d?}/gen-wp-config >wp-config.php
+${d?}/gen-wp-config ${db_instance?} ${db_name?} ${db_pass?} >wp-config.php
 
 echo "\
 runtime: php72
