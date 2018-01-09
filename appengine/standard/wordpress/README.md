@@ -46,13 +46,13 @@ mkdir -p ${app?}
 cd ${app?}
 ln -s ${aewp?} aewp
 aewp/update-wordpress
-cd wordpress
 aewp/gen-wp-config ${db_instance?} ${db_name?} ${db_pass?} >wp-config.php
-cp aewp/app.yaml .
-echo 'zend_extension=opcache.so' >php.ini
+cp aewp/app.yaml wordpress/
+echo 'zend_extension=opcache.so' >wordpress/php.ini
 
 # At the time of this writing, us-central is the only region available for
 # php72.
+cd wordpress
 gcloud app create --region=us-central
 gcloud sql instances patch ${db_instance?} --authorized-gae-apps ${proj?}
 gcloud app deploy
