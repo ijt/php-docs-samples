@@ -2,10 +2,11 @@
 
 1. Open a terminal with [bash][bash] if your system has one. If not, open the [GCP Cloud Shell][cloudshell].
 
-2. Clone the repo and store this subdirectory in `$d` for later use:
+2. Clone the repo and store this subdirectory's path in `$aewp` (App Engine
+   WordPress) for later use:
 ```sh
 git clone https://github.com/ijt/php-docs-samples
-d=$(pwd)/php-docs-samples/appengine/standard/wordpress
+aewp=$(pwd)/php-docs-samples/appengine/standard/wordpress
 ```
 
 3. [Install gcloud][install-gcloud] if it isn't already installed.
@@ -43,10 +44,11 @@ gcloud sql databases create ${db_name?} --instance=${db_instance?}
 app=[DIR WHERE YOU WANT TO CREATE YOUR APP]
 mkdir -p ${app?}
 cd ${app?}
-${d?}/update-wordpress
+ln -s ${aewp?} aewp
+aewp/update-wordpress
 cd wordpress
-${d?}/gen-wp-config ${db_instance?} ${db_name?} ${db_pass?} >wp-config.php
-cp ${d?}/app.yaml .
+aewp/gen-wp-config ${db_instance?} ${db_name?} ${db_pass?} >wp-config.php
+cp aewp/app.yaml .
 echo 'zend_extension=opcache.so' >php.ini
 
 # At the time of this writing, us-central is the only region available for
@@ -74,7 +76,7 @@ When a new version of WordPress becomes available, you can update your app to us
 like this:
 ```sh
 cd ${app?}
-${d?}/update-wordpress
+aewp/update-wordpress
 cd wordpress
 gcloud app deploy
 ```
