@@ -46,7 +46,7 @@ mkdir -p ${app?}
 cd ${app?}
 ln -s ${aewp?} aewp
 aewp/update-wordpress
-aewp/gen-wp-config ${db_instance?} ${db_name?} ${db_pass?} >wp-config.php
+aewp/gen-wp-config ${db_instance?} ${db_name?} ${db_pass?} >wordpress/wp-config.php
 cp aewp/app.yaml wordpress/
 echo 'zend_extension=opcache.so' >wordpress/php.ini
 
