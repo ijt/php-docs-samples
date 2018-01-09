@@ -20,13 +20,13 @@ gcloud config set project ${proj?}
 ```sh
 gcloud alpha billing accounts list
 ```
-Enable billing for your project:
+6. Enable billing for your project:
 ```sh
 account=[ACCOUNT ID CHOSEN FROM THE LIST]
 gcloud alpha billing projects link --billing-account=${account?} ${proj?}
 ```
 
-6. Create the Cloud SQL instance and db:
+7. Create the Cloud SQL instance and db:
 ```sh
 proj=[ID OF YOUR PROJECT]  # if working in an existing project
 db_tier=db-f1-micro  # See https://cloud.google.com/sql/pricing for more choices
@@ -39,7 +39,7 @@ gcloud sql users set-password root % --instance ${db_instance?} --password ${db_
 gcloud sql databases create ${db_name?} --instance=${db_instance?}
 ```
 
-7. Create and deploy the App Engine app:
+8. Create and deploy the App Engine app:
 ```sh
 app=[DIR WHERE YOU WANT TO CREATE YOUR APP]
 mkdir -p ${app?}
@@ -58,13 +58,13 @@ gcloud sql instances patch ${db_instance?} --authorized-gae-apps ${proj?}
 gcloud app deploy
 ```
 
-8. Open the URL printed out by `gcloud app deploy` for your app and fill out
+9. Open the URL printed out by `gcloud app deploy` for your app and fill out
 the admin account setup form that appears.
 
-9. A login page will appear for the admin interface for your WordPress app.
+10. A login page will appear for the admin interface for your WordPress app.
 Log into the admin interface.
 
-10. Click `Plugins | Installed Plugins` on the menu on the left.  In the
+11. Click `Plugins | Installed Plugins` on the menu on the left.  In the
 Plugins page that appears, click `Activate` for the `WP-Stateless` plugin.
 Now your uploaded media will be stored on GCS and will be visible on your
 WordPress site.
