@@ -41,7 +41,7 @@ gcloud sql databases create ${db_name?} --instance=${db_instance?}
 
 8. Create and deploy the App Engine app:
 ```sh
-app=[DIR WHERE YOU WANT TO CREATE YOUR APP]
+app=[FULL PATH TO DIR WHERE YOU WANT TO CREATE YOUR APP]
 mkdir -p ${app?}
 cd ${app?}
 ln -s ${aewp?} aewp
@@ -70,6 +70,26 @@ WordPress site.
 
 Enjoy your WordPress app!
 
+## Installing themes
+It does not work to install themes from the WordPress admin UI because the php72 runtime
+does not include FTP. It's fairly easy to install them from the command line though:
+
+1. Go to https://wordpress.org/themes in your browser and click a theme you'd like to install.
+2. Right-click the Download button and choose "Copy link address".
+3. In the terminal:
+```
+url=[PASTE THE URL]
+cd ${app?}/wordpress/wp-content/themes
+name=$(basename ${url})
+curl ${url?} >${name?}
+unzip ${name?}
+cd ../../
+gcloud app deploy
+```
+4. Go to the admin UI of your WordPress site.
+5. Click `Appearance | Themes` in the menu on the left.
+6. Click `Activate` or `Live Preview` on your new theme.
+
 ## Updating
 When a new version of WordPress becomes available, you can update your app to use it
 like this:
@@ -79,7 +99,7 @@ aewp/update-wordpress
 cd wordpress
 gcloud app deploy
 ```
-Updating from within the WordPress admin console will not work because the php72
+Updating from within the WordPress admin UI will not work because the php72
 runtime has a mostly read-only file system.
 
 [bash]: https://www.gnu.org/software/bash/
