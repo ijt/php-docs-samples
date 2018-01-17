@@ -71,8 +71,8 @@ WordPress site.
 Enjoy your WordPress app!
 
 ## Installing themes
-It does not work to install themes from the WordPress admin UI because the php72 runtime
-does not include FTP. It's fairly easy to install them from the command line though:
+Installing themes from the WordPress admin UI won't work because the php72 runtime
+doesn't include FTP. It's fairly easy to install them from the command line though:
 
 1. Go to https://wordpress.org/themes in your browser and click a theme you'd like to install.
 2. Right-click the Download button and choose "Copy link address".
