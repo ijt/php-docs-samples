@@ -102,9 +102,40 @@ gcloud app deploy
 Updating from within the WordPress admin UI will not work because the php72
 runtime has a mostly read-only file system.
 
+## Migrating an Existing WordPress Site
+
+To migrate an existing WordPress Site, the first step is to migrate your existing MySQL
+database to CloudSQL. This can be done using the `mysqldump` command:
+
+1. Connect to your existing MySQL server and run these commands:
+```sh
+orig_db_user=[YOUR EXISTING WORDPRESS USER]
+orig_db_name=[YOUR EXISTING WORDPRESS DATABASE NAME]
+mysqldump --add-drop-table -u ${orig_db_user?} -p ${orig_db_name?} > wpdatabase.sql
+```
+ 
+2. Use `gsutil` to move the SQL to a bucket so you can import this into the CloudSQL
+instance you created above.
+```sh
+bucket_name=[YOUR CLOUD STORAGE BUCKET NAME]
+gsutil cp wpdatabase.sql gs://${bucket_name?}
+```
+
+3. Use the [CloudSQL Import][cloudsql-import] command in `gcloud` to complete migrating
+your database: 
+```
+gcloud sql instances import ${db_instance?} gs://${bucket_name?}/wpdatabase.sql \
+    --database ${db_name?}
+```
+
+4. If you have a custom domain, follow the documentation on
+[Mapping Custom Domains][mapping-custom-domains].
+
 [bash]: https://www.gnu.org/software/bash/
 [cloudshell]: https://cloud.google.com/shell/docs/quickstart
 [create-project]: https://cloud.google.com/resource-manager/docs/creating-managing-projects
 [enable-billing]: https://cloud.google.com/billing/docs/how-to/modify-project
 [install-gcloud]: https://cloud.google.com/sdk/downloads
 [wsl]: https://docs.microsoft.com/en-us/windows/wsl/install-win10
+[cloudsql-import]: https://cloud.google.com/sql/docs/mysql/import-export/importing
+[mapping-custom-domains]: https://cloud.google.com/appengine/docs/standard/php/mapping-custom-domains
